@@ -19,9 +19,9 @@ router.get("/:id", getTiketById);
 router.post("/", createTiket);
 
 // PUT memperbarui Tiket
-router.put("/:id", updateTiket);
+// router.put("/:id", updateTiket);
 
 // DELETE menghapus Tiket
-router.delete("/:id", deleteTiket);
+// router.delete("/:id", deleteTiket);
 
 module.exports = router;

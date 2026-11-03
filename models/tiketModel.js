@@ -13,7 +13,7 @@ const albumSchema = new mongoose.Schema(
   }
 );
 
-const songSchema = new mongoose.Schema(
+const tiketSchema = new mongoose.Schema(
   {
     namaPembeli: {
       type: String,

@@ -33,21 +33,15 @@ app.get("/", (req, res) => {
     nama: "Dzikri Cahayadi Alamsyah",
     nim: "2428240126",
     topik: 15,
-    kategori: "Musik",
-    resource: "Lagu",
+    kategori: "Tiket Konser",
+    resource: "Tiket",
     endpoints: {
-      getAllSongs: "GET /songs",
-      getSongById: "GET /songs/:id",
-      filterByArtist: "GET /songs?artis=Senandung",
-      createSong: "POST /songs",
-      updateSong: "PUT /songs/:id",
-      deleteSong: "DELETE /songs/:id",
-
-      getAllArtists: "GET /artists",
-      getArtistById: "GET /artists/:id",
-      createArtist: "POST /artists",
-      updateArtist: "PUT /artists/:id",
-      deleteArtist: "DELETE /artists/:id"
+      getAllTikets: "GET /tikets",
+      getSongById: "GET /tikets/:id",
+      filterByArtist: "GET /tikets?artis=Senandung",
+      createSong: "POST /tikets",
+      updateSong: "PUT /tikets/:id",
+      deleteSong: "DELETE /tikets/:id",
     }
   });
 });
