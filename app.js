@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const tiketRoutes = require("./routes/songRoutes");
+const tiketRoutes = require("./routes/tiketRoutes");
 
 const logger = require("./middlewares/logger");
 const cekApiKey = require("./middlewares/cekApiKey.js");

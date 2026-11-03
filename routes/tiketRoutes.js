@@ -7,7 +7,7 @@ const {
   createTiket,
   updateTiket,
   deleteTiket
-} = require("../controllers/songController");
+} = require("../controllers/tiketController");
 
 // GET semua Tiket
 router.get("/", getAllTikets);
