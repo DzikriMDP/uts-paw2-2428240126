@@ -1,82 +1,86 @@
-require('dotenv').config(); //05/10/2026
-const mongoose = require('mongoose');
-const express = require('express');
-const cors = require('cors');
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+const tiketRoutes = require("./routes/songRoutes");
+
+const logger = require("./middlewares/logger");
+const cekApiKey = require("./middlewares/cekApiKey.js");
+
+const {
+  notFound,
+  errorHandler
+} = require("./middlewares/errorHandler");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-function logger(req, res, next) {
-  const waktu = new Date().toISOString();
-  console.log(`[${waktu}] ${req.method} ${req.url}`);
-  next();
-}
+// Middleware
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*"
+  })
+);
 
-function cekApiKey(req, res, next) {
-  const apiKey = req.headers['x-api-key'];
-
-  if (apiKey !== process.env.API_KEY) {
-    return res.status(401).json({ message: 'API key tidak valid' });
-  }
-
-  next();
-}
-
-function errorHttp(status, message) {
-  const err = new Error(message);
-  err.status = status;
-  return err;
-}
-
-const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
-
-const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
-const fakultasRoutes = require('./routes/fakultasRoutes');
-const prodiRoutes = require('./routes/prodiRoutes');
-
-// ---------- Middleware global ----------
+app.use(express.json());
 app.use(logger);
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
 
-// Middleware agar req.body (JSON) dapat dibaca
-app.use(express.json());
+// Halaman utama API
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "RESTful API Lagu",
+    nama: "Dzikri Cahayadi Alamsyah",
+    nim: "2428240126",
+    topik: 15,
+    kategori: "Musik",
+    resource: "Lagu",
+    endpoints: {
+      getAllSongs: "GET /songs",
+      getSongById: "GET /songs/:id",
+      filterByArtist: "GET /songs?artis=Senandung",
+      createSong: "POST /songs",
+      updateSong: "PUT /songs/:id",
+      deleteSong: "DELETE /songs/:id",
 
-// ---------- Route dasar ----------
-app.use('/mahasiswa', mahasiswaRoutes);
-app.use('/fakultas', fakultasRoutes);
-app.use('/prodi', prodiRoutes);
-app.use(express.json());
-
-// ---------- Route dasar ----------
-app.get('/', (req, res) => {
-  res.send('Server Express.js berjalan!');
+      getAllArtists: "GET /artists",
+      getArtistById: "GET /artists/:id",
+      createArtist: "POST /artists",
+      updateArtist: "PUT /artists/:id",
+      deleteArtist: "DELETE /artists/:id"
+    }
+  });
 });
 
-// ---------- Route per modul ----------
-app.use('/mahasiswa', mahasiswaRoutes);
-app.use('/fakultas', fakultasRoutes);
-app.use('/prodi', prodiRoutes);
+// Route tiket
+app.use(
+  "/tikets",
+  cekApiKey,
+  tiketRoutes
+);
 
-// ---------- Handler 404 dan error handler (paling bawah) ----------
-app.use(notFoundHandler);
+// Middleware 404 dan error handler
+app.use(notFound);
 app.use(errorHandler);
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+// Koneksi MongoDB dan menjalankan server
+const PORT = process.env.PORT || 3000;
+const DB_URI = process.env.DB_URI;
 
-// app.listen(PORT, () => {
-//   console.log(`Server berjalan di http://localhost:${PORT}`);
-// });
-
-mongoose.connect(process.env.DB_URI)
+mongoose
+  .connect(DB_URI)
   .then(() => {
-    console.log('Terhubung ke MongoDB');
-    app.listen(PORT, () => console.log(`Server berjalan di http://localhost:${PORT}`));
+    console.log("Berhasil terhubung ke MongoDB");
+
+    app.listen(PORT, () => {
+      console.log(`Server berjalan di http://localhost:${PORT}`);
+    });
   })
-  .catch((err) => {
-    console.error('Gagal terhubung:', err.message);
-    process.exit(1);
+  .catch((error) => {
+    console.error(
+      "Gagal terhubung ke MongoDB:",
+      error.message
+    );
   });
+
+module.exports = app;
