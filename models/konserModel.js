@@ -1,23 +1,22 @@
 const mongoose = require("mongoose");
 
-const KonserSchema = new mongoose.Schema(
+const konserSchema = new mongoose.Schema(
   {
-    namaArtis: {
+    kode: {
       type: String,
-      required: true,
-      trim: true
+      required: [true, "Kode konser wajib diisi"],
+      unique: true,
+      trim: true,
+      uppercase: true
     },
-    genre: {
+    nama: {
       type: String,
-      trim: true
-    },
-    deskripsi: {
-      type: String,
+      required: [true, "Nama konser wajib diisi"],
       trim: true
     }
   },
   {
-    timestamps: true
+    versionKey: false
   }
 );
 

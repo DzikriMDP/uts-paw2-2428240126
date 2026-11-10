@@ -2,26 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getAllTikets,
-  getTiketById,
   createTiket,
-  updateTiket,
-  deleteTiket
+  getAllTiket,
+  getTiketById
 } = require("../controllers/tiketController");
 
-// GET semua Tiket
-router.get("/", getAllTikets);
-
-// GET detail Tiket berdasarkan ID
-router.get("/:id", getTiketById);
-
-// POST menambahkan Tiket
+// POST /tiket
 router.post("/", createTiket);
 
-// PUT memperbarui Tiket
-// router.put("/:id", updateTiket);
+// GET /tiket
+router.get("/", getAllTiket);
 
-// DELETE menghapus Tiket
-// router.delete("/:id", deleteTiket);
+// GET /tiket/:id
+router.get("/:id", getTiketById);
 
 module.exports = router;

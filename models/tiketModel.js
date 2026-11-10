@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 
-const albumSchema = new mongoose.Schema(
+const kontakSchema = new mongoose.Schema(
   {
-    namaAlbum: {
+    email: {
       type: String,
-      required: true,
+      required: [true, "Email kontak wajib diisi"],
+      trim: true
+    },
+    telepon: {
+      type: String,
+      required: [true, "Nomor telepon wajib diisi"],
       trim: true
     }
   },
@@ -15,35 +20,43 @@ const albumSchema = new mongoose.Schema(
 
 const tiketSchema = new mongoose.Schema(
   {
+    kodeTiket: {
+      type: String,
+      required: [true, "Kode tiket wajib diisi"],
+      unique: true,
+      trim: true
+    },
     namaPembeli: {
       type: String,
-      required: true,
+      required: [true, "Nama pembeli wajib diisi"],
       trim: true
     },
     harga: {
       type: Number,
-      ref: "Artist",
-      required: true,
-      min: 0
+      required: [true, "Harga tiket wajib diisi"],
+      min: [0, "Harga minimal 0"]
     },
     kelas: {
       type: String,
-      required: true,
-      trim: true,
+      required: [true, "Kelas tiket wajib diisi"],
+      trim: true
     },
     kontak: {
-      type: String,
-      required: true,
+      type: kontakSchema,
+      required: [true, "Kontak pembeli wajib diisi"]
     },
     konserId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Konser",
-      required: true,
-      min: 1
+      required: [true, "Konser wajib dipilih"]
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
     }
   },
   {
-    timestamps: true
+    versionKey: false
   }
 );
 
